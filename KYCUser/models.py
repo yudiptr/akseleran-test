@@ -20,7 +20,7 @@ class KYCUsers(models.Model):
     isVerified = models.BooleanField(default=False)
     
     def save(self, *args, **kwargs):
-        if self.pk:  # Check if the object has a primary key (i.e., already exists in the database)
+        if self.pk:
             try:
                 orig = KYCUsers.objects.get(pk=self.pk)
                 if self.email != orig.email:
@@ -28,7 +28,7 @@ class KYCUsers(models.Model):
                 if self.phone_number != orig.phone_number:
                     self.phone_number_before_update = orig.phone_number
             except KYCUsers.DoesNotExist:
-                pass  # If the object doesn't exist in the database, do nothing
+                pass
         super(KYCUsers, self).save(*args, **kwargs)
 
 
