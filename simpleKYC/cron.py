@@ -10,12 +10,12 @@ from KYCUser.models import KYCUsers
 logger = logging.getLogger(__name__)
 
 class EmailUsersCronJob(CronJobBase):
-    RUN_EVERY_MINS = 1  # Run every days
+    RUN_EVERY_MINS = 1  # Run every 1 minutes
     # RUN_EVERY_MINS = 60 * 24  # Run every days
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'simpleKYC.email_users_cron_job'  # A unique code for this cron job
-
+    code = 'simpleKYC.email_users_cron_job'
+    print(1)
     def do(self):
         users = KYCUsers.objects.filter(isVerified=False)
         for user in users:
@@ -28,7 +28,7 @@ class EmailUsersCronJob(CronJobBase):
                 host=settings.RESEND_SMTP_HOST,
                 port=settings.RESEND_SMTP_PORT,
                 username=settings.RESEND_SMTP_USERNAME,
-                password="re_WUx1Ck6V_HmUwBDqTLwurpsgXzybjuTQy",
+                password=os.environ.get("RESEND_PASSWORD"),
                 use_tls=True,
                 ) as connection:
                     r = EmailMessage(
