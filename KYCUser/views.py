@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets
 from .models import KYCUsers
-from .serializers import KYCUserSerializer
+from .serializers import KYCUserSerializer, AdminViewUserSerializer
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -37,3 +37,8 @@ class KYCUserViewSet(viewsets.ModelViewSet):
         
         return Response(serializer.data)
     
+    @action(detail=False, methods=['get'])
+    def admin_view(self, request):
+        queryset = KYCUsers.objects.all()
+        serializer = AdminViewUserSerializer(queryset, many=True)
+        return Response(serializer.data)

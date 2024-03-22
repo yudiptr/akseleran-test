@@ -17,16 +17,20 @@ class KYCUsers(models.Model):
     monthly_income = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     email_before_update = models.EmailField(max_length=255, blank=True, null=True)
     phone_number_before_update = models.CharField(max_length=15, blank=True, null=True)
+    isVerified = models.BooleanField(default=False)
     
     def save(self, *args, **kwargs):
-        if self.pk:
-            # Check if email or phone number has changed
-            orig = KYCUsers.objects.get(pk=self.pk)
-            if self.email != orig.email:
-                self.email_before_update = orig.email
-            if self.phone_number != orig.phone_number:
-                self.phone_number_before_update = orig.phone_number
+        if self.pk:  # Check if the object has a primary key (i.e., already exists in the database)
+            try:
+                orig = KYCUsers.objects.get(pk=self.pk)
+                if self.email != orig.email:
+                    self.email_before_update = orig.email
+                if self.phone_number != orig.phone_number:
+                    self.phone_number_before_update = orig.phone_number
+            except KYCUsers.DoesNotExist:
+                pass  # If the object doesn't exist in the database, do nothing
         super(KYCUsers, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name

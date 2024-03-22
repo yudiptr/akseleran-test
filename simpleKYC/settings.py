@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CRON_CLASSES = [
+    'simpleKYC.cron.EmailUsersCronJob',
+]
+
+
 
 # Application definition
 
@@ -39,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'KYCUser',
+    'django_cron',
 ]
 
 REST_FRAMEWORK = {
@@ -133,3 +139,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+RESEND_SMTP_PORT = 587
+RESEND_SMTP_USERNAME = 'resend'
+RESEND_SMTP_HOST = 'smtp.resend.com'
