@@ -39,6 +39,6 @@ class KYCUserViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['get'])
     def admin_view(self, request):
-        queryset = KYCUsers.objects.all()
+        queryset = KYCUsers.objects.filter(isVerified=False)
         serializer = AdminViewUserSerializer(queryset, many=True)
         return Response(serializer.data)
